@@ -1,10 +1,10 @@
-import time
-
-from xpath_extractor import xtract_fields, xtract_from_url
+from utils.xpath_extractor import Extractor
 
 """
 Example using xpath_extractor to extract paper title, author names, email from springer.com.
 """
+
+extractor = Extractor()
 
 base_url = 'https://link.springer.com'
 field_xpaths = {
@@ -23,10 +23,9 @@ cnt = 0
 # extract data from first 5 pages
 for page in range(1, 6):
     url = url_template.format(page, category, start_year, end_year)
-    for paper_url in xtract_from_url(url, url_xpath):
-        time.sleep(0.01)
+    for paper_url in extractor.xtract_from_url(url, url_xpath):
         paper_url = base_url + paper_url
-        result = xtract_fields(paper_url, field_xpaths)
+        result = extractor.xtract_fields_from_url(paper_url, field_xpaths)
         # extract only paper which have contact email
         if len(result['email']) > 0:
             cnt += 1
